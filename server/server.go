@@ -9,9 +9,6 @@ import (
 	"time"
 )
 
-//AprHandler defines custom handler for endpoints
-type AprHandler func(w http.ResponseWriter, r *http.Request)
-
 //route defines a struct for routing purpose
 type route struct {
 	Path    string
@@ -127,9 +124,10 @@ func (cfg *config) ServeHTTP(outPut http.ResponseWriter, request *http.Request) 
 		fmt.Fprintf(outPut, "%s", "page not found")
 		return
 	}
-	reqRoute.Service(outPut, request)
+	handleUserRequest(&outPut, reqRoute, request)
 }
 
+//Find matching route
 func (cfg *config) matchRoute(method string, path string) *route {
 	for _, val := range cfg.Routes {
 		if val.Path == path && val.Method == method {
