@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/MrApr/PersonalTracker/server"
 
 func main() {
-	fmt.Println("Hello world")
+	server.ConfigureServer("localhost", 8000).StartServer()
 }
