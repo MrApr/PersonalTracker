@@ -1,4 +1,4 @@
-package Repositories
+package repositories
 
 type Collection struct {
 	Id    uint   `json:"id" gorm:"not null;primaryKey;autoIncrement"`
