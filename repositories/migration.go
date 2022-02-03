@@ -1,12 +1,14 @@
 package repositories
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/MrApr/PersonalTracker/models"
+)
 
 func Migrate() bool {
-	var models []interface{} = []interface{}{Collection{}, Task{}}
-	db := ConnectToDb()
-	for _, model := range models {
-		err := db.AutoMigrate(model)
+	var migrationModels []interface{} = []interface{}{Collection{}, Task{}}
+	for _, model := range migrationModels {
+		err := models.DB.AutoMigrate(model)
 		if err != nil {
 			fmt.Println(err)
 			return false
