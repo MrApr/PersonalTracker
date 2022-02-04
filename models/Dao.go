@@ -20,6 +20,7 @@ type dbConnection struct {
 //DB holds database instance
 var DB *gorm.DB
 
+//ConnectToDb creates a new connection to database
 func ConnectToDb(maxConn int, maxOpen int) {
 	conn := dbConnection{
 		user:   "heroes",
