@@ -120,7 +120,8 @@ func (cfg *config) ServeHTTP(outPut http.ResponseWriter, request *http.Request) 
 	reqRoute := cfg.matchRoute(method, path)
 
 	if reqRoute == nil {
-		//Todo add 404 status header
+		outPut.Header().Set("Content-Type", "application/json")
+		outPut.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(outPut, "%s", "page not found")
 		return
 	}

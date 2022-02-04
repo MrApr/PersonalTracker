@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/MrApr/PersonalTracker/models"
 	"github.com/MrApr/PersonalTracker/server"
+	"github.com/MrApr/PersonalTracker/services"
 )
 
 var migrate *bool = flag.Bool("migrate", false, "Migrate database and creates schema")
@@ -15,5 +16,7 @@ func main() {
 		models.Migrate()
 		return
 	}
-	server.ConfigureServer("localhost", 8000).StartServer()
+	sv := server.ConfigureServer("localhost", 8000)
+	sv.Get("/collections", services.GetCollections)
+	sv.StartServer()
 }
