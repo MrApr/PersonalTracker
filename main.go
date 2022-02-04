@@ -17,6 +17,15 @@ func main() {
 		return
 	}
 	sv := server.ConfigureServer("localhost", 8000)
+
 	sv.Get("/collections", services.GetCollections)
+	sv.Post("/collections/create", services.CreateNewCollection)
+	sv.Post("/collections/edit", services.UpdateCollection)
+	sv.Post("/collections/delete", services.DeleteCollection)
+
+	sv.Get("/tasks", services.GetTasks)
+	sv.Post("/tasks/create", services.CreateTask)
+	sv.Post("/tasks/edit", services.EditTask)
+	sv.Post("/tasks/delete", services.DeleteTask)
 	sv.StartServer()
 }
