@@ -10,32 +10,32 @@ type CollectionRepo models.Collection
 
 //ICollectionRepository Determines collection repository interface behaviors
 type ICollectionRepository interface {
-	//GetCollection gets and return single collection
-	GetCollection(id int) (*CollectionRepo, error)
-	//GetAllCollections Get and return all collections
-	GetAllCollections(name string) (*[]CollectionRepo, error)
-	//GetAllCollectionTypes get and return all existing collection types
-	GetAllCollectionTypes() []models.CollectionType
-	//CreateCollection creates a new collection in db
-	CreateCollection() bool
-	//EditCollection edits existing collection in db
-	EditCollection(editedData *CollectionRepo) error
-	//DeleteCollection deletes existing collection in db
-	DeleteCollection() error
+	//Get gets and return single collection
+	Get(id int) error
+	//GetAll Get and return all collections
+	GetAll(name string) (*[]CollectionRepo, error)
+	//CollectionTypes get and return all existing collection types
+	CollectionTypes() []models.CollectionType
+	//Create creates a new collection in db
+	Create() bool
+	//Edit edits existing collection in db
+	Edit(editedData *CollectionRepo) error
+	//Delete deletes existing collection in db
+	Delete() error
 }
 
-//GetCollection Get and returns single collection
-func (col *CollectionRepo) GetCollection(id int) (*CollectionRepo, error) { //Todo define custom error types for better err handling
+//Get and returns single collection
+func (col *CollectionRepo) Get(id int) error { //Todo define custom error types for better err handling
 	result := models.DB.Where("id = ?", id).First(col)
 	if result.Error != nil {
 		//errors.Is(result.Error, gorm.ErrRecordNotFound)//Todo pay attention to this line
-		return nil, fmt.Errorf("%s: %s", "Query execution failed with error", result.Error)
+		return fmt.Errorf("%s: %s", "Query execution failed with error", result.Error)
 	}
-	return col, nil
+	return nil
 }
 
-//GetAllCollections Get and return all collections
-func (col *CollectionRepo) GetAllCollections(name string) (*[]CollectionRepo, error) {
+//GetAll and return all collections
+func (col *CollectionRepo) GetAll(name string) (*[]CollectionRepo, error) {
 	var collections *[]CollectionRepo
 	result := models.DB.Where("name LIKE ?", "%"+name+"%").Find(collections)
 	if result.Error != nil {
@@ -44,8 +44,8 @@ func (col *CollectionRepo) GetAllCollections(name string) (*[]CollectionRepo, er
 	return collections, nil
 }
 
-//GetAllCollectionTypes get and return all existing collection types
-func (col *CollectionRepo) GetAllCollectionTypes() []models.CollectionType {
+//CollectionTypes get and return all existing collection types
+func (col *CollectionRepo) CollectionTypes() []models.CollectionType {
 	var collTypes []models.CollectionType
 	collTypes = append(collTypes, models.DAILY)
 	collTypes = append(collTypes, models.WEEKLY)
@@ -54,7 +54,8 @@ func (col *CollectionRepo) GetAllCollectionTypes() []models.CollectionType {
 	return collTypes
 }
 
-func (col *CollectionRepo) CreateCollection() bool {
+//Create a new collection into db
+func (col *CollectionRepo) Create() bool {
 	res := models.DB.Create(col)
 	if res.Error != nil {
 		return false
@@ -62,8 +63,8 @@ func (col *CollectionRepo) CreateCollection() bool {
 	return true
 }
 
-//EditCollection edits existing collection in db
-func (col *CollectionRepo) EditCollection(editedData *CollectionRepo) error {
+//Edit existing collection in db
+func (col *CollectionRepo) Edit(editedData *CollectionRepo) error {
 	col.Title = editedData.Title
 	col.Type = editedData.Type
 	result := models.DB.Save(col)
@@ -73,8 +74,8 @@ func (col *CollectionRepo) EditCollection(editedData *CollectionRepo) error {
 	return nil
 }
 
-//DeleteCollection deletes existing collection in db
-func (col *CollectionRepo) DeleteCollection() error {
+//Delete existing collection in db
+func (col *CollectionRepo) Delete() error {
 	result := models.DB.Delete(col)
 	if result.Error != nil {
 		return fmt.Errorf("%s: %s", "Unable to delete Model with error", result.Error)
