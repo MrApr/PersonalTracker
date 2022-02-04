@@ -27,5 +27,13 @@ func main() {
 	sv.Post("/tasks/create", services.CreateTask)
 	sv.Post("/tasks/edit", services.EditTask)
 	sv.Post("/tasks/delete", services.DeleteTask)
+
+	//Todo add validation layer
+	//Todo add Template layer
+	//Todo add SqlLite in order to offline Use
+	//Todo Add logging layer (both file and remote)
+	//Todo make it to read from conf file
+	//Todo define custom error types for better err handling
+
 	sv.StartServer()
 }

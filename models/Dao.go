@@ -28,8 +28,7 @@ func ConnectToDb(maxConn int, maxOpen int) {
 		host:   "localhost",
 		port:   3306,
 		dbName: "process_tracker",
-	} //Todo make it to read from conf file
-	//Todo check whether gorm creates connection pool or not
+	}
 	DB = conn.mysqlConnection()
 
 	dbConfigurator, err := DB.DB()

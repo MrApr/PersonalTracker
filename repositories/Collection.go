@@ -25,7 +25,7 @@ type ICollectionRepository interface {
 }
 
 //Get and returns single collection
-func (col *CollectionRepo) Get(id int) error { //Todo define custom error types for better err handling
+func (col *CollectionRepo) Get(id int) error {
 	result := models.DB.Where("id = ?", id).First(col)
 	if result.Error != nil {
 		//errors.Is(result.Error, gorm.ErrRecordNotFound)//Todo pay attention to this line
