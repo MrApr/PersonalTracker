@@ -71,3 +71,7 @@ func (task *TaskRepo) Delete() error {
 	}
 	return nil
 }
+
+func (*TaskRepo) TableName() string {
+	return "tasks"
+}

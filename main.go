@@ -34,6 +34,9 @@ func main() {
 	//Todo Add logging layer (both file and remote)
 	//Todo make it to read from conf file
 	//Todo define custom error types for better err handling
+	//Todo Dockerize project
+	//Todo Add tests for services & repos
+	//Todo Test with locust
 
 	sv.StartServer()
 }

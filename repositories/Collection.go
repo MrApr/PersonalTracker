@@ -37,7 +37,7 @@ func (col *CollectionRepo) Get(id int) error {
 //GetAll and return all collections
 func (col *CollectionRepo) GetAll(name string) (*[]CollectionRepo, error) {
 	var collections *[]CollectionRepo
-	result := models.DB.Where("name LIKE ?", "%"+name+"%").Find(collections)
+	result := models.DB.Where("title LIKE ?", "%"+name+"%").Find(&collections)
 	if result.Error != nil {
 		return nil, fmt.Errorf("%s: %s", "Unable to fetch batch collections with error", result.Error)
 	}
@@ -81,4 +81,9 @@ func (col *CollectionRepo) Delete() error {
 		return fmt.Errorf("%s: %s", "Unable to delete Model with error", result.Error)
 	}
 	return nil
+}
+
+// TableName overrides the table name used by User to `profiles`
+func (*CollectionRepo) TableName() string {
+	return "collections"
 }
