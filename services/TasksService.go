@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/MrApr/PersonalTracker/repositories"
 	"github.com/MrApr/PersonalTracker/server"
+	"github.com/MrApr/PersonalTracker/validation"
 	"net/http"
 	"time"
 )
@@ -53,6 +54,13 @@ func CreateTask(req *server.Request) error {
 		})
 	}
 
+	validate := validation.Validate(createTaskReq)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
+		})
+	}
+
 	createTaskRepo := new(repositories.TaskRepo)
 	createTaskRepo.Title = createTaskReq.Title
 	createTaskRepo.CollectionId = createTaskReq.CollectionId
@@ -79,6 +87,13 @@ func EditTask(req *server.Request) error {
 	if err != nil {
 		return req.Status(http.StatusInternalServerError).Json(&server.Response{
 			"message": err.Error(),
+		})
+	}
+
+	validate := validation.Validate(editTaskReq)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
 		})
 	}
 
@@ -117,6 +132,13 @@ func DeleteTask(req *server.Request) error {
 	if err != nil {
 		return req.Status(http.StatusInternalServerError).Json(&server.Response{
 			"message": err.Error(),
+		})
+	}
+
+	validate := validation.Validate(deleteTaskReq)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
 		})
 	}
 

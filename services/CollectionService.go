@@ -5,23 +5,24 @@ import (
 	"github.com/MrApr/PersonalTracker/models"
 	"github.com/MrApr/PersonalTracker/repositories"
 	"github.com/MrApr/PersonalTracker/server"
+	"github.com/MrApr/PersonalTracker/validation"
 	"net/http"
 )
 
 //GetCollectionRequest request
 type GetCollectionRequest struct {
-	Name string `json:"name"`
+	Name string `json:"name" validate:"min=5,max=50"`
 }
 
 //CreateCollectionReq for creating a new collection
 type CreateCollectionReq struct {
-	Name string                `json:"name"`
-	Type models.CollectionType `json:"type"`
+	Name string                `json:"name" validate:"required,min=5,max=50"`
+	Type models.CollectionType `json:"type" validate:"required,max=10"`
 }
 
 //DeleteCollectionReq Request for deleting collection
 type DeleteCollectionReq struct {
-	Id int `json:"id"`
+	Id int `json:"id" validate=:"required,number,gt=0"`
 }
 
 //UpdateCollectionReq for updating existing collection
@@ -38,6 +39,13 @@ func GetCollections(req *server.Request) error {
 	if err != nil {
 		return req.Status(http.StatusInternalServerError).Json(&server.Response{
 			"message": err.Error(),
+		})
+	}
+
+	validate := validation.Validate(getCollectionReq)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
 		})
 	}
 
@@ -65,6 +73,13 @@ func CreateNewCollection(req *server.Request) error {
 		})
 	}
 
+	validate := validation.Validate(createReqCollectionReq)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
+		})
+	}
+
 	collectionRepo := new(repositories.CollectionRepo)
 	collectionRepo.Title = createReqCollectionReq.Name
 	collectionRepo.Type = createReqCollectionReq.Type
@@ -89,6 +104,13 @@ func UpdateCollection(req *server.Request) error {
 	if err != nil {
 		return req.Status(http.StatusInternalServerError).Json(&server.Response{
 			"message": err.Error(),
+		})
+	}
+
+	validate := validation.Validate(updateCollection)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
 		})
 	}
 
@@ -124,6 +146,13 @@ func DeleteCollection(req *server.Request) error {
 	if err != nil {
 		return req.Status(http.StatusInternalServerError).Json(&server.Response{
 			"message": err.Error(),
+		})
+	}
+
+	validate := validation.Validate(delCollectionReq)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
 		})
 	}
 
