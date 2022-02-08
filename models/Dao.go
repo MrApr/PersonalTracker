@@ -2,7 +2,7 @@ package models
 
 import (
 	"database/sql"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"strconv"
 	"time"
@@ -41,8 +41,9 @@ func ConnectToDb(maxConn int, maxOpen int) {
 
 //makeMysqlConnection to mysql server
 func (dbConn *dbConnection) mysqlConnection() *gorm.DB {
-	dsn := dbConn.makeConnString()
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	//dsn := dbConn.makeConnString()
+	db, err := gorm.Open(sqlite.Open("Pt.db"), &gorm.Config{})
+	//db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}

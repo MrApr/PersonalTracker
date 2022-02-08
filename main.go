@@ -28,7 +28,6 @@ func main() {
 	sv.Post("/tasks/edit", services.EditTask)
 	sv.Post("/tasks/delete", services.DeleteTask)
 
-	//Todo add validation layer
 	//Todo add Template layer
 	//Todo add SqlLite in order to offline Use
 	//Todo Add logging layer (both file and remote)
