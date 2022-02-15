@@ -16,6 +16,7 @@ func (e *Env) Load(dir string) {
 	if err != nil {
 		panic(fmt.Errorf("%s: %s", "Unable to load .env file with error", err))
 	}
+	defer file.Close()
 
 	reader := bufio.NewScanner(file)
 
