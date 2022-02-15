@@ -1,12 +1,20 @@
 package server
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 )
+
+//TEMPLATE_DIR Contains path of tepmpate dir
+const TEMPLATE_DIR string = "Templates"
+
+//templatesCache contains cache of executed and parsed tmplates
+var templatesCache map[string]*template.Template
 
 //Response defines response of app
 type Response map[string]interface{}
@@ -39,6 +47,29 @@ func (rq *Request) Json(resp *Response) error {
 		return err
 	}
 	return nil
+}
+
+//GenerateTemplate generates html Output
+func (rq *Request) GenerateTemplate(name string, values interface{}) error {
+	dir := TEMPLATE_DIR + "/" + name
+
+	tmpl, exists := templatesCache[dir]
+	if !exists {
+		templatesCache[dir] = template.Must(template.ParseFiles(dir))
+	}
+
+	tmpl = templatesCache[dir]
+
+	buffer := new(bytes.Buffer)
+
+	err := tmpl.Execute(buffer, values)
+
+	if err != nil {
+		return fmt.Errorf("%s: %s", "Unable to execute and run template with err ", err)
+	}
+
+	_, err = fmt.Fprintf(rq.out, "%v", buffer)
+	return err
 }
 
 //ParseBody parses body and returns it

@@ -30,7 +30,7 @@ func main() {
 	sv.Post("/tasks/edit", services.EditTask)
 	sv.Post("/tasks/delete", services.DeleteTask)
 
-	//Todo add Template layer
+	//Todo add Templates layer Add Templates engine parser for golang
 	//Todo Add logging layer (both file and remote)
 	//Todo define custom error types for better err handling
 	//Todo Dockerize project
