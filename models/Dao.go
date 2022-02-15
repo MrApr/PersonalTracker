@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"os"
 	"strconv"
 	"time"
 )
@@ -22,12 +23,13 @@ var DB *gorm.DB
 
 //ConnectToDb creates a new connection to database
 func ConnectToDb(maxConn int, maxOpen int) {
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	conn := dbConnection{
-		user:   "heroes",
-		pass:   "22510070",
-		host:   "localhost",
-		port:   3306,
-		dbName: "process_tracker",
+		user:   os.Getenv("USER"),
+		pass:   os.Getenv("PASS"),
+		host:   os.Getenv("HOST"),
+		port:   port,
+		dbName: os.Getenv("DBNAME"),
 	}
 	DB = conn.mysqlConnection()
 

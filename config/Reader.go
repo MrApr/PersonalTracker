@@ -13,7 +13,7 @@ type Reader interface {
 //CreateNewReader for reading operations
 func CreateNewReader(name string) Reader {
 	switch name {
-	case "env":
+	case "memory":
 		return new(internal.Memory)
 	default:
 		return new(internal.Env)
