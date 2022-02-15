@@ -30,8 +30,7 @@ func main() {
 	sv.Post("/tasks/edit", services.EditTask)
 	sv.Post("/tasks/delete", services.DeleteTask)
 
-	//Todo Add logging layer (both file and remote)
-	//Todo define custom error types for better err handling
+	//Todo Add logger layer (both file and remote)
 	//Todo Dockerize project
 	//Todo Add tests for services & repos
 	//Todo Test with locust

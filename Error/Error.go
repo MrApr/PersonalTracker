@@ -2,7 +2,7 @@ package Error
 
 import (
 	"fmt"
-	"log"
+	"github.com/MrApr/PersonalTracker/logger"
 	"runtime/debug"
 )
 
@@ -16,9 +16,10 @@ type AdvanceError struct {
 
 //AdvanceError implements error interface for error struct implicitly
 func (e *AdvanceError) Error() string {
+	logger := logger.Create("default")
 	var format string
 	format = "%s: %s, %s in line %d\n"
-	log.Printf(format, e.Type, e.File, e.Message, e.Line)
+	logger.Printf(format, e.Type, e.File, e.Message, e.Line)
 	debug.Stack()
 	return fmt.Sprintf(format, e.Type, e.File, e.Message, e.Line)
 }
