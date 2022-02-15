@@ -8,12 +8,13 @@ import (
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 //TEMPLATE_DIR Contains path of tepmpate dir
 const TEMPLATE_DIR string = "Templates"
 
-//templatesCache contains cache of executed and parsed tmplates
+//templatesCache contains cache of executed and parsed templates
 var templatesCache map[string]*template.Template
 
 //Response defines response of app
@@ -26,6 +27,11 @@ type Request struct {
 	ctx     context.Context
 	Request *http.Request
 	status  int
+}
+
+//init initializes function
+func init() {
+	templatesCache = make(map[string]*template.Template)
 }
 
 //Json generates json output
@@ -51,7 +57,7 @@ func (rq *Request) Json(resp *Response) error {
 
 //GenerateTemplate generates html Output
 func (rq *Request) GenerateTemplate(name string, values interface{}) error {
-	dir := TEMPLATE_DIR + "/" + name
+	dir := makeTmplateDir(name)
 
 	tmpl, exists := templatesCache[dir]
 	if !exists {
@@ -90,4 +96,12 @@ func (rq *Request) ParseBody(values interface{}) error {
 func (rq *Request) Status(status int) *Request {
 	rq.status = status
 	return rq
+}
+
+func makeTmplateDir(tmplName string) string {
+	currentDir, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Errorf("%s: %s", "cannot obtain current directory with error", err))
+	}
+	return currentDir + "/" + TEMPLATE_DIR + "/" + tmplName
 }
