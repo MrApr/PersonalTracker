@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+	"github.com/MrApr/PersonalTracker/Error"
 	"github.com/MrApr/PersonalTracker/models"
 )
 
@@ -29,7 +30,12 @@ func (col *CollectionRepo) Get(id int) error {
 	result := models.DB.Where("id = ?", id).First(col)
 	if result.Error != nil {
 		//errors.Is(result.Error, gorm.ErrRecordNotFound)//Todo pay attention to this line
-		return fmt.Errorf("%s: %s", "Query execution failed with error", result.Error)
+		return &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Query execution failed with error", result.Error),
+			Line:    30,
+			Type:    "warning",
+			File:    "Collection Repository",
+		}
 	}
 	return nil
 }
@@ -39,7 +45,12 @@ func (col *CollectionRepo) GetAll(name string) (*[]CollectionRepo, error) {
 	var collections *[]CollectionRepo
 	result := models.DB.Where("title LIKE ?", "%"+name+"%").Find(&collections)
 	if result.Error != nil {
-		return nil, fmt.Errorf("%s: %s", "Unable to fetch batch collections with error", result.Error)
+		return nil, &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to fetch batch collections with error", result.Error),
+			Line:    46,
+			Type:    "warning",
+			File:    "Collection Repository",
+		}
 	}
 	return collections, nil
 }
@@ -69,7 +80,12 @@ func (col *CollectionRepo) Edit(editedData *CollectionRepo) error {
 	col.Type = editedData.Type
 	result := models.DB.Save(col)
 	if result.Error != nil {
-		return fmt.Errorf("%s: %s", "Unable to update existing data in db with error", result.Error)
+		return &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to update existing data in db with error", result.Error),
+			Line:    81,
+			Type:    "warning",
+			File:    "Collection Repository",
+		}
 	}
 	return nil
 }
@@ -78,7 +94,12 @@ func (col *CollectionRepo) Edit(editedData *CollectionRepo) error {
 func (col *CollectionRepo) Delete() error {
 	result := models.DB.Delete(col)
 	if result.Error != nil {
-		return fmt.Errorf("%s: %s", "Unable to delete Model with error", result.Error)
+		return &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to delete Model with error", result.Error),
+			Line:    99,
+			Type:    "warning",
+			File:    "Collection Repository",
+		}
 	}
 	return nil
 }

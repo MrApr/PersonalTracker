@@ -3,6 +3,7 @@ package internal
 import (
 	"bufio"
 	"fmt"
+	"github.com/MrApr/PersonalTracker/Error"
 	"os"
 	"strings"
 )
@@ -13,7 +14,12 @@ type Memory map[string]interface{}
 //Load values from memory
 func (e *Memory) Load(dir string) {
 	if dir == "" {
-		panic(fmt.Errorf("%s", "Invalid directory for .memory"))
+		panic(Error.AdvanceError{
+			Message: "Directory should not sent or selected empty",
+			Line:    35,
+			Type:    "Critical",
+			File:    "InMemory",
+		})
 	}
 	e.readValues(dir)
 }
@@ -33,7 +39,12 @@ func (e Memory) Get(key string) interface{} {
 func (e *Memory) readValues(dir string) {
 	file, err := os.Open(dir)
 	if err != nil {
-		panic(fmt.Errorf("%s: %s", "Config cannot get opened with err", err))
+		panic(Error.AdvanceError{
+			Message: err.Error(),
+			Line:    35,
+			Type:    "Critical",
+			File:    "InMemory",
+		})
 	}
 	defer file.Close()
 
@@ -42,7 +53,12 @@ func (e *Memory) readValues(dir string) {
 	for reader.Scan() {
 		err = e.extractVars(reader.Text())
 		if err != nil {
-			panic(fmt.Errorf("%s %s", "Unable to extract string with error: ", err))
+			panic(Error.AdvanceError{
+				Message: err.Error(),
+				Line:    54,
+				Type:    "Critical",
+				File:    "InMemory",
+			})
 		}
 	}
 }

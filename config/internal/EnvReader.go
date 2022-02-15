@@ -2,7 +2,7 @@ package internal
 
 import (
 	"bufio"
-	"fmt"
+	"github.com/MrApr/PersonalTracker/Error"
 	"os"
 	"strings"
 )
@@ -14,7 +14,12 @@ type Env string
 func (e *Env) Load(dir string) {
 	file, err := os.Open(dir)
 	if err != nil {
-		panic(fmt.Errorf("%s: %s", "Unable to load .env file with error", err))
+		panic(Error.AdvanceError{
+			Message: err.Error(),
+			File:    "EnvReader",
+			Type:    "Critical",
+			Line:    17,
+		})
 	}
 	defer file.Close()
 
@@ -23,7 +28,12 @@ func (e *Env) Load(dir string) {
 	for reader.Scan() {
 		text := reader.Text()
 		if err = e.registerVars(text); err != nil {
-			panic(fmt.Errorf("%s: %s", "Unable to register .env variable with error", err))
+			panic(Error.AdvanceError{
+				Message: err.Error(),
+				File:    "EnvReader",
+				Type:    "Critical",
+				Line:    30,
+			})
 		}
 	}
 }

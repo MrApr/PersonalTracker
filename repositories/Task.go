@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+	"github.com/MrApr/PersonalTracker/Error"
 	"github.com/MrApr/PersonalTracker/models"
 )
 
@@ -25,7 +26,12 @@ type ITaskRepository interface {
 func (task *TaskRepo) Get(taskId int) error {
 	result := models.DB.Where("id = ? ", taskId).First(task)
 	if result.Error != nil {
-		return fmt.Errorf("%s: %s", "Unable to find task error", result.Error)
+		return &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to find task error", result.Error),
+			Line:    17,
+			Type:    "warning",
+			File:    "Task Repository",
+		}
 	}
 	return nil
 }
@@ -35,7 +41,12 @@ func (task *TaskRepo) GetAll() (*[]TaskRepo, error) {
 	var tasks *[]TaskRepo
 	result := models.DB.Find(tasks)
 	if result.Error != nil {
-		return nil, fmt.Errorf("%s: %s", "Unable to find tasks error", result.Error)
+		return nil, &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to find tasks error", result.Error),
+			Line:    42,
+			Type:    "warning",
+			File:    "Task Repository",
+		}
 	}
 	return tasks, nil
 }
@@ -44,7 +55,12 @@ func (task *TaskRepo) GetAll() (*[]TaskRepo, error) {
 func (task *TaskRepo) Create() error {
 	result := models.DB.Create(task)
 	if result.Error != nil {
-		return fmt.Errorf("%s: %s", "Unable to create a new task with error", result.Error)
+		return &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to create a new task with error", result.Error),
+			Line:    56,
+			Type:    "warning",
+			File:    "Task Repository",
+		}
 	}
 	return nil
 }
@@ -58,7 +74,12 @@ func (task *TaskRepo) Edit(newData *TaskRepo) error {
 
 	result := models.DB.Save(task)
 	if result.Error != nil {
-		return fmt.Errorf("%s: %s", "Unable to update a new task with error", result.Error)
+		return &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to update a new task with error", result.Error),
+			Line:    75,
+			Type:    "warning",
+			File:    "Task Repository",
+		}
 	}
 	return nil
 }
@@ -67,7 +88,12 @@ func (task *TaskRepo) Edit(newData *TaskRepo) error {
 func (task *TaskRepo) Delete() error {
 	result := models.DB.Delete(task)
 	if result.Error != nil {
-		return fmt.Errorf("%s: %s", "Unable to update a new task with error", result.Error)
+		return &Error.AdvanceError{
+			Message: fmt.Sprintf("%s: %s", "Unable to update a new task with error", result.Error),
+			Line:    89,
+			Type:    "warning",
+			File:    "Task Repository",
+		}
 	}
 	return nil
 }

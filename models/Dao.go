@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"github.com/MrApr/PersonalTracker/Error"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"os"
@@ -35,7 +36,12 @@ func ConnectToDb(maxConn int, maxOpen int) {
 
 	dbConfigurator, err := DB.DB()
 	if err != nil {
-		panic(err)
+		panic(Error.AdvanceError{
+			Message: err.Error(),
+			Line:    37,
+			Type:    "Critical",
+			File:    "DAO",
+		})
 	}
 
 	conn.configDBConn(dbConfigurator, maxConn, maxOpen)
@@ -47,7 +53,12 @@ func (dbConn *dbConnection) mysqlConnection() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("Pt.db"), &gorm.Config{})
 	//db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		panic(Error.AdvanceError{
+			Message: err.Error(),
+			Line:    53,
+			Type:    "Critical",
+			File:    "DAO",
+		})
 	}
 	return db
 }
