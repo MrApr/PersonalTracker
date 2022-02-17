@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}}</title>
+    <style>
+        table {
+            background-color: black;
+            color: white;
+        }
+
+        th {
+            padding: 10px;
+        }
+
+        td {
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        {{range .Headers}}
+        <th>{{.}}</th>
+        {{end}}
+        <th>Operation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {{range .Cols}}
+        <td>{{.Title}}</td>
+        <td>{{.Type}}</td>
+        <td>
+            <form method="POST" action="/collections/delete">
+                <input type="hidden" name="id" value="{{.ID}}">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+        {{end}}
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

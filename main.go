@@ -21,6 +21,7 @@ func main() {
 	sv := server.ConfigureServer("localhost", 8000)
 
 	sv.Get("/collections", services.GetCollections)
+	sv.Get("/show", services.RenderCollections)
 	sv.Post("/collections/create", services.CreateNewCollection)
 	sv.Post("/collections/edit", services.UpdateCollection)
 	sv.Post("/collections/delete", services.DeleteCollection)
@@ -30,8 +31,7 @@ func main() {
 	sv.Post("/tasks/edit", services.EditTask)
 	sv.Post("/tasks/delete", services.DeleteTask)
 
-	//Todo Add logger layer (both file and remote)
-	//Todo Dockerize project
+	//Todo Dockerize project & readme md
 	//Todo Add tests for services & repos
 	//Todo Test with locust
 

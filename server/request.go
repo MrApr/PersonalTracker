@@ -87,6 +87,11 @@ func (rq *Request) GenerateTemplate(name string, values interface{}) error {
 //ParseBody parses body and returns it
 func (rq *Request) ParseBody(values interface{}) error {
 	body, err := ioutil.ReadAll(rq.Request.Body)
+
+	if len(body) == 0 {
+		return nil
+	}
+
 	if err != nil {
 		return &Error.AdvanceError{
 			File:    "request",

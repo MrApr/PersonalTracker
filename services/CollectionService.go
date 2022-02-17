@@ -62,6 +62,45 @@ func GetCollections(req *server.Request) error {
 	})
 }
 
+//RenderCollections gets and returns all collections in html format
+func RenderCollections(req *server.Request) error {
+	var getCollectionReq *GetCollectionRequest = new(GetCollectionRequest)
+
+	err := req.ParseBody(getCollectionReq)
+	if err != nil {
+		return req.Status(http.StatusInternalServerError).Json(&server.Response{
+			"message": err.Error(),
+		})
+	}
+
+	validate := validation.Validate(getCollectionReq)
+	if validate != nil {
+		return req.Status(http.StatusBadRequest).Json(&server.Response{
+			"message": validate,
+		})
+	}
+
+	collectionRepo := new(repositories.CollectionRepo)
+	collections, err := collectionRepo.GetAll(getCollectionReq.Name)
+	if err != nil {
+		return req.Status(http.StatusNotFound).Json(&server.Response{
+			"message": err.Error(),
+		})
+	}
+
+	var listPageStruct = struct {
+		Title   string
+		Headers []string
+		Cols    *[]repositories.CollectionRepo
+	}{
+		Title:   "Collections",
+		Headers: []string{"Title", "Type"},
+		Cols:    collections,
+	}
+	fmt.Println("hello")
+	return req.GenerateTemplate("lists.html", listPageStruct)
+}
+
 //CreateNewCollection for new collection creation
 func CreateNewCollection(req *server.Request) error {
 	var createReqCollectionReq *CreateCollectionReq = new(CreateCollectionReq)
