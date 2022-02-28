@@ -18,7 +18,7 @@ func main() {
 		models.Migrate()
 		return
 	}
-	sv := server.ConfigureServer("localhost", 8000)
+	sv := server.ConfigureServer("0.0.0.0", 8001)
 
 	sv.Get("/collections", services.GetCollections)
 	sv.Get("/show", services.RenderCollections)
